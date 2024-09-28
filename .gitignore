@@ -1,0 +1,8 @@
+.ipynb_checkpoints
+data
+*.pdf
+*.txt
+CNN.py
+*.pth
+test.py
+demo_notebook.ipynb
