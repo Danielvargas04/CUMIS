@@ -6,3 +6,5 @@ CNN.py
 *.pth
 test.py
 demo_notebook.ipynb
+__pycache__
+*npy
