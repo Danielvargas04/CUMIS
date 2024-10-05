@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.fft import fft, ifft, fftfreq
 from scipy.signal import find_peaks
+from scipy import signal, ndimage
 
 def data_extrac(N=27, data_directory = './data/lunar/training/data/S12_GradeA/'):
     '''
@@ -191,3 +192,20 @@ def peaks_from_data(tr_times, filter_cft, prominence=0.3, distance=10000*6.6, wl
         for i, peak in enumerate(peaks):
             print(f"Pico en tiempo {tr_times[peak]} tiene una confianza de [{confidence[i]:.2f}]")
     return peaks
+
+def get_index_from_f(arrf,fval):
+    tol = 1.5e-3
+    aux = abs(arrf - fval)
+    index = np.where(aux<tol)
+    return int(index[0])
+
+def hist_convolve_spectrogram(sxx, Nconvs):
+    conv = sxx/sxx.max()
+    kernel = np.ones((10, 10))
+    for i in range(Nconvs):
+        conv = ndimage.convolve(conv, kernel, mode='nearest')
+        conv = conv/conv.max()
+        
+    hist = np.sum(conv/conv.max(), axis=0)
+    hist /= hist.max()
+    return hist , conv
