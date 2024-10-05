@@ -99,7 +99,7 @@ def data_extrac_test(N=1, data_directory = './data/lunar/test/data/S12_GradeB'):
 
     return tr_times, tr_data_filt_norm, df, tr_data
 
-def CFT(tr_data_filt_norm, df, sta_len = 120, lta_len = 600):
+def CFT(tr_data_filt_norm, df, sta_len = 60, lta_len = 900):
 
     #STA/LTA
     # How long should the short-term and long-term window be, in seconds?\
@@ -113,7 +113,7 @@ def CFT(tr_data_filt_norm, df, sta_len = 120, lta_len = 600):
     cft = classic_sta_lta(tr_data_filt_norm, int(sta_len * df), int(lta_len * df))
     return cft
 
-def fourier_filter(cft):
+def fourier_filter(cft, cutoff_freq = 0.0001/2):
     # Número de puntos en el arreglo
     n = len(cft)
 
@@ -127,7 +127,7 @@ def fourier_filter(cft):
     frequencies = fftfreq(n, d=sampling_rate)
 
     # Definir la frecuencia de corte para el filtro
-    cutoff_freq = 0.0001/2 # Ajusta según lo que necesites
+    #cutoff_freq = 0.0001/2 # Ajusta según lo que necesites
 
     # Aplicar el filtro pasa bajos: eliminar las frecuencias más altas que la frecuencia de corte
     cft_fft[np.abs(frequencies) > cutoff_freq] = 0
@@ -139,13 +139,13 @@ def fourier_filter(cft):
     filtered_cft_real = np.real(filtered_cft)
     return filtered_cft_real
 
-def peaks_plot(tr_times, filter_cft, prominence=0.3, distance=10000*6.6, wlen_value=8000*6.6 ):
+def peaks_plot(tr_times, filter_cft, prominence=0.3, distance=10000*6.6, wlen_value=8000*6.6, height= 1.3 ):
     # Use find_peaks with prominence, distance, and wlen
     # wlen_value: Set the window length for prominence calculation (adjust as needed)
-    peaks, properties = find_peaks(filter_cft, prominence=prominence, distance=distance, wlen=wlen_value)
+    peaks, properties = find_peaks(filter_cft, height= height, prominence=prominence, distance=distance, wlen=wlen_value)
 
     # Plot the signal and the detected peaks
-    fig, ax = plt.subplots(1, 1, figsize=(16, 3))
+    fig, ax = plt.subplots(1, 1, figsize=(12,3))
     ax.plot(tr_times, filter_cft, label="filter_cft")
     ax.plot(tr_times[peaks], filter_cft[peaks], "x", label="Peaks")
 
@@ -156,14 +156,38 @@ def peaks_plot(tr_times, filter_cft, prominence=0.3, distance=10000*6.6, wlen_va
         
         # Plot horizontal lines showing the left and right bases of each prominence
         ax.hlines(y=filter_cft[peak] - prominence, xmin=tr_times[left_base], xmax=tr_times[right_base], color="C1", linestyles="--")
-
+    ax.hlines(1, 0, tr_times[-1], color="gray", linestyles="--")
     # Customize the plot
-    ax.set_title(f"Peak Detection with Prominence (wlen={wlen_value}) Visualization")
+    ax.set_title(f"Peak Detection with Prominence: ({prominence}) (wlen={wlen_value}) Visualization")
     ax.legend()
 
-    # Show the indices of the detected peaks
+    # Show the detected peaks
+
     print(f"Picos encontrados en los tiempos: {tr_times[peaks]}")
+    print(f"Amplitud del pico (CFT): {filter_cft[peaks]}")
 
-    plt.show()
+    if len(peaks)!=0:
+        # Calcular la confianza en función de la prominencia y la altura
+        confidence = properties['prominences'] / np.max(properties['prominences'])  # Normalizar la prominencia
+        confidence *= filter_cft[peaks] / np.max(filter_cft[peaks])  # Ajustar por la altura de los picos
 
-    
+        # Mostrar los picos con su confianza
+        for i, peak in enumerate(peaks):
+            print(f"Pico en tiempo {tr_times[peak]} tiene una confianza de [{confidence[i]:.2f}]")
+    return peaks, properties
+
+def peaks_from_data(tr_times, filter_cft, prominence=0.3, distance=10000*6.6, wlen_value=8000*6.6, height= 1.3 ):
+    # Use find_peaks with prominence, distance, and wlen
+    # wlen_value: Set the window length for prominence calculation (adjust as needed)
+    peaks, properties = find_peaks(filter_cft, height= height, prominence=prominence, distance=distance, wlen=wlen_value)
+    print(f"Picos encontrados en los tiempos: {tr_times[peaks]}")
+    print(f"Amplitud del pico (CFT): {filter_cft[peaks]}")
+    if len(peaks)!=0:
+        # Calcular la confianza en función de la prominencia y la altura
+        confidence = properties['prominences'] / np.max(properties['prominences'])  # Normalizar la prominencia
+        confidence *= filter_cft[peaks] / np.max(filter_cft[peaks])  # Ajustar por la altura de los picos
+
+        # Mostrar los picos con su confianza
+        for i, peak in enumerate(peaks):
+            print(f"Pico en tiempo {tr_times[peak]} tiene una confianza de [{confidence[i]:.2f}]")
+    return peaks
