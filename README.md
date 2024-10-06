@@ -29,7 +29,7 @@ To install the required Python dependencies, follow these steps:
    ```bash
    pip install -r requirements.txt
 
-3. Run the Project
+##Step 3: Run the Project
 
 Once you have the data and the dependencies set up, you can run the project:
 
