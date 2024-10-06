@@ -24,3 +24,14 @@ To install the required Python dependencies, follow these steps:
    python3 -m venv myenv
    source myenv/bin/activate  # For Linux/MacOS
    myenv\Scripts\activate      # For Windows
+2. Install the required libraries using the `requirements.txt` file:
+
+```bash
+pip install -r requirements.txt
+
+### Step 3: Run the Project
+
+Once you have the data and the dependencies set up, you can run the project:
+
+```bash
+python3 main.py
