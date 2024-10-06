@@ -3,7 +3,10 @@ import sys
 from functions import*
 import calendar
 import numpy as np
+import locale
 
+# Establecer la localización en inglés (EE.UU.)
+locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
 
 
 
