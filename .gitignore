@@ -1,10 +1,11 @@
 .ipynb_checkpoints
 data
 *.pdf
-*.txt
 CNN.py
 *.pth
 test.py
 demo_notebook.ipynb
 __pycache__
 *npy
+*.zip
+peak_plots.png
