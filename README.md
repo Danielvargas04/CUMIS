@@ -11,7 +11,7 @@ This project processes seismic data using several Python libraries. Follow the i
 
 ### Step 1: Download the Data
 
-1. Download the data by following this [link]([https://example.com/link-to-data](https://drive.google.com/file/d/1Ga8_bZl1tN9ltSwH-2fwNPp3QREHnh2D/view?usp=sharing)).
+1. Download the data by following this [link]([https://example.com/link-to-data](https://drive.google.com/file/d/1Ga8_bZl1tN9ltSwH-2fwNPp3QREHnh2D/view?usp=sharing).
 2. Extract the ZIP file in your project directory.
 
 ### Step 2: Install the Dependencies
