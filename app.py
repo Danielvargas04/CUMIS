@@ -211,11 +211,11 @@ def draw_event_info(screen, date, filepath, image):
     pygame.draw.rect(screen, BLACK, info_rect, border_radius=15)
     
     # Mostrar la fecha
-    text_surface = FONT.render(f"Fecha: {date}", True, WHITE)
+    text_surface = FONT.render(f"Date: {date}", True, WHITE)
     screen.blit(text_surface, (info_rect.x + 10, info_rect.y + 10))
     
     # Mostrar el filepath (primer archivo)
-    filepath_surface = FONT.render(f"Signal:", True, WHITE)
+    filepath_surface = FONT.render(f"Seismic Detections:", True, WHITE)
     screen.blit(filepath_surface, (info_rect.x + 10, info_rect.y + 50))
     
     # Dividir el filepath si es muy largo
