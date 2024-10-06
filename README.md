@@ -1,4 +1,4 @@
-# Project Title
+# CUMIS
 
 This project processes seismic data using several Python libraries. Follow the instructions below to set up the environment and run the project.
 
