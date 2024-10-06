@@ -1,14 +1,9 @@
 import pygame
 import sys
 from functions import*
-from principal import*
-import pygame
-from datetime import datetime
 import calendar
-import os
-import re
 import numpy as np
-from collections import defaultdict
+
 
 
 
@@ -119,7 +114,7 @@ def display_main_menu(screen):
     
 
 # Función para crear un botón
-def crear_boton_circular(texto, x, y, radio, color_inactivo, color_activo, icon, size, accion=None, fondo_ventana = None, Dir = None, date = None):
+def crear_boton_circular(texto, x, y, radio, color_inactivo, color_activo, icon, size, accion=None, fondo_ventana = None, Dir = None, date = None, name  = "Moon"):
     mouse = pygame.mouse.get_pos()  # Obtener la posición del mouse
     click = pygame.mouse.get_pressed()  # Obtener el estado de los clics del mouse
 
@@ -131,7 +126,7 @@ def crear_boton_circular(texto, x, y, radio, color_inactivo, color_activo, icon,
         pygame.draw.circle(screen, color_activo, (x, y), radio)  # Cambia el color al pasar el cursor
         screen.blit(icon,(x-(size//2),y-(size//2)))
         if click[0] == 1 and accion is not None:  # Si se hace clic, realiza la acción
-            accion(fondo_ventana,Dir,date)
+            accion(fondo_ventana,Dir,date,name)
     else:
         pygame.draw.circle(screen, color_inactivo, (x, y), radio)  # Color normal del botón
         screen.blit(icon,(x-(size//2),y-(size//2)))
@@ -220,7 +215,7 @@ def draw_event_info(screen, date, filepath, image):
     screen.blit(text_surface, (info_rect.x + 10, info_rect.y + 10))
     
     # Mostrar el filepath (primer archivo)
-    filepath_surface = FONT.render(f"Archivo:", True, WHITE)
+    filepath_surface = FONT.render(f"Signal:", True, WHITE)
     screen.blit(filepath_surface, (info_rect.x + 10, info_rect.y + 50))
     
     # Dividir el filepath si es muy largo
@@ -232,8 +227,8 @@ def draw_event_info(screen, date, filepath, image):
     
     # Mostrar la imagen (escalar si es necesario)
     if image:
-        image = pygame.transform.scale(image, (200, 200))  # Redimensionar imagen
-        screen.blit(image, (info_rect.x + 10, info_rect.y + 300))  # Mostrar la imagen
+        image = pygame.transform.scale(image, (700, 430))  # Redimensionar imagen
+        screen.blit(image, (info_rect.x + 25, info_rect.y + 100))  # Mostrar la imagen
 
 # Función para cargar una imagen desde un archivo
 def load_image(filepath):
@@ -249,7 +244,7 @@ def run_event(filepath):
     print(f"Ejecutando función para el archivo: {filepath}")
     
     
-def window(fondo=0,Dir=0, date = 0):
+def window(fondo=0,Dir=0, date = 0, name ="Moon"):
 
     eventos = dictionary_name(dir_name = Dir, dates_name_list = date)
     SCREEN_WIDTH = 1440
@@ -350,10 +345,12 @@ def window(fondo=0,Dir=0, date = 0):
                                         rect = pygame.Rect(100 + day_index * 80, 150 + week_index * 80, 70, 70)
                                         if rect.collidepoint(event.pos):
                                             ##############MAIIIIIIIIIIIIIIIIIIIIIIIIIIN############
+                                           # print(filepaths[0])
+                                            work_flow(filepaths[0][0],name)
                                             selected_event = {
                                                 'date': f"{current_year}-{current_month:02}-{day:02}",
-                                                'filepath': filepaths[0],  # Mostrar solo el primer archivo
-                                                'image': load_image('./img/moon.png')  # Reemplaza con la ruta a tu imagen
+                                                'filepath': filepaths[0][0],  # Mostrar solo el primer archivo
+                                                'image': load_image('./img/peak_plots.png')  # Reemplaza con la ruta a tu imagen
                                             }
                                             break
             
@@ -375,9 +372,9 @@ while True:
 
 
    # print(mouse_x, mouse_y)
-    crear_boton_circular('Moon', window_w//4, 500, 170,color_fondo, color_moon, moon_button_image, 360, window,Fondo_Luna,dir_moon,dates_moon_list)
-    crear_boton_circular('Mars',  2*window_w//4, 500, 170,color_fondo, color_mars, mars_button_image,300, window,Fondo_marte,dir_mars,dates_mars_list)
-    crear_boton_circular('Earth', 3*window_w//4, 500, 170,color_fondo, color_earth, earth_button_image,340, window,Fondo_tierra,dir_earth,dates_earth_list)
+    crear_boton_circular('Moon', window_w//4, 500, 170,color_fondo, color_moon, moon_button_image, 360, window,Fondo_Luna,dir_moon,dates_moon_list,name="Moon")
+    crear_boton_circular('Mars',  2*window_w//4, 500, 170,color_fondo, color_mars, mars_button_image,300, window,Fondo_marte,dir_mars,dates_mars_list,name="Mars")
+    crear_boton_circular('Earth', 3*window_w//4, 500, 170,color_fondo, color_earth, earth_button_image,340, window,Fondo_tierra,dir_earth,dates_earth_list,name="Earth")
     # Actualizar pantalla
     pygame.display.flip()
 
