@@ -26,10 +26,10 @@ To install the required Python dependencies, follow these steps:
    myenv\Scripts\activate      # For Windows
 2. Install the required libraries using the `requirements.txt` file:
 
-```bash
-pip install -r requirements.txt
+   ```bash
+   pip install -r requirements.txt
 
-### Step 3: Run the Project
+3. Run the Project
 
 Once you have the data and the dependencies set up, you can run the project:
 
