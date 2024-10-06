@@ -229,7 +229,7 @@ def hist_convolve_spectrogram(sxx, Nconvs):
     hist = np.sum(conv/conv.max(), axis=0)
     hist /= hist.max()
     return hist , conv
-
+"""
 def Seismic_Plot(tr_times, tr_data_filt_norm, filename, arrivals, confidence):
     # Buscar una fecha en formato YYYY-MM-DD usando una expresión regular
     date_match = re.search(r'\d{4}-\d{2}-\d{2}', filename)
@@ -279,36 +279,30 @@ def Seismic_Plot(tr_times, tr_data_filt_norm, filename, arrivals, confidence):
     plt.savefig("./img/peak_plots.png", dpi=300)
 """
 def Seismic_Plot(tr_times, tr_data, filename, arrivals, confidence):
-    # Buscar una fecha en formato YYYY-MM-DD usando una expresión regular
-    date_match = re.search(r'\d{4}-\d{2}-\d{2}', filename)
-    
-    # Si se encuentra una coincidencia, extraer la fecha
-    if date_match:
-        date = date_match.group(0)  # Obtener la fecha encontrada
-    
-    # Encontrar el nombre del conjunto de datos ('mars' en este caso) buscando después de '/data/'
-    dataset_match = re.search(r'/data/(\w+)/', filename)
-    
-    # Si se encuentra una coincidencia, extraer el nombre del conjunto de datos
-    if dataset_match:
-        dataset_name = dataset_match.group(1)  # Obtener el nombre del conjunto de datos
-    
     # Comprobar si arrivals está vacío
     if len(arrivals) == 0:
         print("No arrivals provided. Plotting the data without vertical lines.")
     
-    # Crear la figura y el eje, con un tamaño ajustado para que sea más larga en el eje X
-    fig, ax = plt.subplots(1, 1, figsize=(4, 8))  # Más largo en el eje X
-
-    # Graficar los datos de la señal
-    ax.plot(tr_times, tr_data, color='navy', linewidth=1.5)
-    ax.set_xlabel('Time [s]', fontsize=12)
-    ax.set_ylabel('Velocity [m/s]', fontsize=12)
-    ax.set_title(f'{f"{date} from {dataset_name}"}', fontsize=14, weight='bold')
-
-    # Ajustar la cuadrícula y mejorar la apariencia general
-    ax.grid(True, which='both', linestyle='--', linewidth=0.5)
-    ax.set_facecolor('#f9f9f9')  # Color de fondo suave
+    fig, ax = plt.subplots(1, 1, figsize=(7, 4))
+    
+    # Graficar la señal sísmica con línea blanca
+    ax.plot(tr_times, tr_data, color='white')
+    
+    # Configurar el color de los ejes en blanco
+    ax.spines['bottom'].set_color('white')
+    ax.spines['top'].set_color('white')
+    ax.spines['right'].set_color('white')
+    ax.spines['left'].set_color('white')
+    
+    # Configurar el color de las marcas (ticks) y etiquetas
+    ax.tick_params(axis='x', colors='white')
+    ax.tick_params(axis='y', colors='white')
+    ax.xaxis.label.set_color('white')  # Etiqueta del eje X en blanco
+    ax.yaxis.label.set_color('white')  # Etiqueta del eje Y en blanco
+    
+    # Título en blanco
+    ax.set_xlabel('Time [s]', color='white')
+    ax.set_ylabel('Velocity [m/s]', color='white')
     
     if len(arrivals) > 0:
         # Ordenar arrivals y confidence en base a los valores de confidence
@@ -324,19 +318,20 @@ def Seismic_Plot(tr_times, tr_data, filename, arrivals, confidence):
         else:
             colors = ['r', 'g'] + list(plt.cm.viridis(np.linspace(0, 1, len(arrivals)-2)))  # Rojo, verde, y luego otros colores
         
-        # Agregar líneas verticales de llegada
+        # Agregar líneas verticales
         for i in range(len(sorted_arrivals)):
-            ax.axvline(x=sorted_arrivals[i], color=colors[i], alpha=sorted_confidence[i], linestyle='--', 
-                       label=f'Confidence: {sorted_confidence[i]:.2f}', linewidth=1.5)
-        
-        ax.legend(loc='upper right', fontsize=10)
+            ax.axvline(x=sorted_arrivals[i], color=colors[i], alpha=sorted_confidence[i], 
+                       label=f'Confidence: {sorted_confidence[i]:.2f}')
     
-    # Ajustar los márgenes para mejor presentación
+    # Leyenda con texto en blanco y fondo negro
+    legend = ax.legend(facecolor='black', framealpha=1, edgecolor='white',fontsize=12)
+    for text in legend.get_texts():
+        text.set_color('white')  # Hacer el texto de la leyenda en blanco
     plt.tight_layout()
-
-    # Guardar la imagen con alta resolución y fondo blanco
-    plt.savefig('./img/peak_plots.pdf', dpi=300, bbox_inches='tight', transparent=False)
-"""
+    # Guardar el gráfico con fondo transparente
+    plt.savefig("./img/peak_plots.png", transparent=True, dpi=300)
+    
+    
 def Confidence(tr_times, tr_data, df, peaks, properties, tolerance=0.15, f_min=0.5, f_max=1.0, ):
 
     time_left_bases = tr_times[properties['left_bases']] ##Left base of the time 
