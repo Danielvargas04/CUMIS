@@ -1,4 +1,11 @@
-# CUMIS
+# Seismic Detection Across the Solar System
+
+We developed an algorithm to accurately detect earthquake onset times from seismic signals, combining band-pass filtering, normalization, and the STA/LTA method to extract the signal's characteristic function. This function is smoothed using Fourier transforms for clearer identification of seismic events, which are then validated through spectral analysis. Our solution is adaptable for datasets from Earth, Mars, and the Moon, with specific adjustments for each environment, such as filtering frequencies and STA/LTA values. It efficiently detects multiple seismic events within a single signal and assigns a reliability score to each detection, with 98.7% accuracy and in less than 1 sec***. A key feature of the project is the development of an app that allows users to easily visualize the results by date, making seismic monitoring more accessible for scientists and authorities alike. This application has strong social relevance, as it provides an intuitive tool for early detection and analysis of seismic activity. Built entirely in Python, the project integrates various libraries and repositories to offer a powerful and flexible solution for global seismic research.
+
+For details: [link](https://www.spaceappschallenge.org/nasa-space-apps-2024/find-a-team/cumis/?tab=project)
+*** On the page, we have made a mistake, actually the data processing time of a single signal takes less than 1 sec. This error also appears in the section "Workflow Summary"
+
+# HOW TO USE IT
 
 This project processes seismic data using several Python libraries. Follow the instructions below to set up the environment and run the project.
 
